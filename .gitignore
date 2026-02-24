@@ -1,4 +1,5 @@
 torch_libela/__pycache__
 test/PGK2_rec.mol2.gz
-test/cmp47_2.mol.gz
+test/cmp47_2.mol2.gz
 test/test.grid
+test/*.sdf

@@ -1,6 +1,8 @@
 from rdkit import Chem
+from rdkit.Geometry import Point3D
 from utils import Sybyl_parameters
 import torch
+import gzip
 
 
 class Mol():
@@ -14,6 +16,7 @@ class Mol():
         self.radii = []
         self.masses = []
         self.HBdonors = 0
+        self.rdkit_mol = None
 
     
     def _get_sybyl_atom_names(self, mol):
@@ -60,3 +63,29 @@ class Mol():
         self.epsilons_sqrt = torch.sqrt(self.epsilons)
         self.radii = torch.tensor(self.radii, dtype=torch.float32)
         self.masses = torch.tensor(self.masses, dtype=torch.float32)
+        self.rdkit_mol = mol
+    
+    def write_mol_to_sdf(self, new_xyz):
+        conf = self.rdkit_mol.GetConformer()
+        for i in range(self.rdkit_mol.GetNumAtoms()):
+            conf.SetAtomPosition(i, Point3D(new_xyz[i][0].item(),new_xyz[i][1].item(),new_xyz[i][2].item()))
+        with Chem.SDWriter('torch_libela_lig.sdf') as w:
+            w.write(self.rdkit_mol)
+        return 'torch_libela_lig.sdf'
+        
+
+
+
+def read_mol_from_gzip(gzip_mol2):
+    mymol = Mol()
+    with gzip.open(gzip_mol2, 'rt') as gz_file:
+        content = gz_file.read()
+        mol_blocks = content.split('@<TRIPOS>MOLECULE')
+        for mol_block in mol_blocks:
+            if mol_block.strip() == "" or not mol_block.startswith('\n'):
+                continue
+                    
+            full_mol_block = '@<TRIPOS>MOLECULE' + mol_block
+            mymol.read_mol2_from_block(full_mol_block, sanitize=False)
+            break
+    return mymol

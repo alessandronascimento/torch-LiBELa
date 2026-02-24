@@ -395,7 +395,7 @@ class Docker(nn.Module):
               hb_donor_energy_sum + \
               hb_acceptor_energy_sum
         
-        return ene
+        return ene, elec_energy_sum, (vdw_A_energy_sum - vdw_B_energy_sum), (rec_solv_energy_sum+lig_solv_energy_sum)
 
     def forward(self):
         """
@@ -411,5 +411,5 @@ class Docker(nn.Module):
         """
         # Transform the ligand coordinates using the input parameters
         new_xyz = self.roto_translate(self.Cmol, self.x.to('cuda' if torch.cuda.is_available() else 'cpu'))
-        energy = self.compute_ene(self.Cmol, self.Grids, new_xyz)
+        energy, elec, vdw, solv = self.compute_ene(self.Cmol, self.Grids, new_xyz)
         return energy, new_xyz
