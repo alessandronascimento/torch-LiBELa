@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torch-libela"
+version = "0.1.0"
+description = "Ligand docking tool running on pytorch."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "rdkit>=2023.03.1",
+    "biopython>=1.81"
+]
+
+[project.scripts]
+# This creates a command-line tool! 
+# When the user types 'run-libela', it will execute the 'main' function inside 'cli.py'
+run-libela = "torch_libela.dock_from_cif_complex:main"

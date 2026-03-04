@@ -1,8 +1,8 @@
 import argparse
-from Mol import read_mol_from_gzip
-from Docker import Docker
-from Grid import Grid
-from prepare import prepare_ligand_and_receptor
+from torch_libela.Mol import read_mol_from_gzip
+from torch_libela.Docker import Docker
+from torch_libela.Grid import Grid
+from torch_libela.prepare import prepare_ligand_and_receptor
 import sys,os
 import torch
 import torch.optim as optim
