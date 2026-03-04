@@ -1,6 +1,6 @@
 from rdkit import Chem
 from rdkit.Geometry import Point3D
-from utils import Sybyl_parameters
+from torch_libela.utils import Sybyl_parameters
 import torch
 import gzip
 
