@@ -51,6 +51,8 @@ class Mol():
     
     def read_mol2_from_block(self, mol_block, removeHs=False, sanitize=True):
         mol = Chem.MolFromMol2Block(mol_block, removeHs=removeHs, sanitize=sanitize)
+        if mol is None:
+            raise ValueError("Could not parse MOL2 block into RDKit molecule.")
         conf = mol.GetConformer()
         self.N = mol.GetNumAtoms()
         self.charges = torch.tensor([float(atom.GetProp('_TriposPartialCharge')) for atom in mol.GetAtoms()], dtype=torch.float32)

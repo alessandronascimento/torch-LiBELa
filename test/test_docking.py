@@ -19,6 +19,7 @@ parameters = {
     'sigma' : 3.5,
     'scale_elec_energy' : 1.0,
     'scale_vdw_energy' : 1.0,
+    'num_epochs' : 100,
     'grid_file' : 'test.grid'
 }
 
@@ -47,8 +48,7 @@ model = Docker(parameters, grids, Lig)
 optimizer = optim.Adam(model.parameters(), lr=2e-2)
 
 # The docking loop
-
-for i in range(50):
+for i in range(parameters['num_epochs']):
     optimizer.zero_grad()
     ene, new_xyz = model()
     ene.backward()
